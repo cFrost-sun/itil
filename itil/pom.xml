@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.eulerframework</groupId>
+    <artifactId>itil</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <properties>
+        <jdk.version>1.7</jdk.version> 
+        <euler-framework.version>0.3.0-SNAPSHOT</euler-framework.version>
+    </properties>
+
+    <dependencies>
+        <!-- J2EE -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+            <version>3.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <scope>provided</scope>
+            <version>2.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.eulerframework</groupId>
+            <artifactId>euler-web-core</artifactId>
+            <version>${euler-framework.version}</version>
+        </dependency>
+        
+        <dependency>
+          <groupId>com.microsoft.sqlserver</groupId>
+          <artifactId>sqljdbc</artifactId>
+          <version>4.1</version>
+          <classifier>jdk17</classifier>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+        
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>develop</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <mvn.mode>develop</mvn.mode>
+                <mvn.log.level>info</mvn.log.level>
+                <mvn.buildtimestamp>${maven.build.timestamp}</mvn.buildtimestamp>
+                <mvn.db.url><![CDATA[jdbc:sqlserver://192.168.8.142:1433;databaseName=servicedesk]]></mvn.db.url>
+                <mvn.db.username>sa</mvn.db.username>
+                <mvn.db.password></mvn.db.password>
+                <mvn.db.showsql>true</mvn.db.showsql>
+            </properties>
+            <build>
+                <finalName>itil</finalName>
+            </build>
+        </profile>
+        <profile>
+            <id>release</id>
+            <properties>
+                <mvn.mode>release</mvn.mode>
+                <mvn.log.level>warn</mvn.log.level>
+                <mvn.buildtimestamp>${maven.build.timestamp}</mvn.buildtimestamp>
+                <mvn.db.url><![CDATA[jdbc:sqlserver://192.168.8.142:1433;databaseName=servicedesk]]></mvn.db.url>
+                <mvn.db.username>sa</mvn.db.username>
+                <mvn.db.password></mvn.db.password>
+                <mvn.db.showsql>true</mvn.db.showsql>
+            </properties>
+            <build>
+                <finalName>itil-${project.version}-release</finalName>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
