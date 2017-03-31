@@ -8,7 +8,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <%@ include file="/WEB-INF/jsp/themes/default/common/css-global.jsp"%>
-<%@ include file="/WEB-INF/jsp/themes/default/common/css-info_page.jsp"%>
+<%@ include file="/WEB-INF/jsp/themes/default/common/css-infoPage.jsp"%>
 
 <title>${__SITENAME}</title>
 
