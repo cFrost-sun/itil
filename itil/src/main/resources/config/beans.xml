@@ -16,6 +16,9 @@
     <bean id="workOrderDao" class="net.eulerframework.web.module.demo.dao.WorkOrderDao">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+    <bean id="workOrderChargeDao" class="net.eulerframework.web.module.demo.dao.WorkOrderChargeDao">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
     
     <import resource="beans-database.xml"/>
     <import resource="beans-schedule.xml"/>
