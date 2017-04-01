@@ -81,7 +81,7 @@
                 <th data-options="field:'timeSpent',align:'center',width:'130px'">解决问题所用的时间</th>
                 <th data-options="field:'downTime',align:'center',width:'120px'">停机时间-日志</th>
                 <th data-options="field:'lostTime',align:'center',width:'120px'">丢失时间-日志</th>
-                <th data-options="field:'createdTime',align:'center',width:'120px'">工作日志类型</th>
+                <th data-options="field:'workLogTypeName',align:'center',width:'120px'">工作日志类型</th>
                 <th data-options="field:'removedArtifactName',align:'center',width:'120px'">拆下部件名称</th>
                 <th data-options="field:'removedArtifactPn',align:'center',width:'120px'">拆下部件件号P/N</th>
                 <th data-options="field:'removedArtifactSn',align:'center',width:'120px'">拆下部件序号S/N</th>

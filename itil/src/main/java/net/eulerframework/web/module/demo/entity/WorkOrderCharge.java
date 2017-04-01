@@ -20,6 +20,14 @@ public class WorkOrderCharge extends NonIDEntity<WorkOrderCharge> {
     @Column(name = "WORKORDER_ID")
     private Long workerOrderId;
     
+    // 日志类型ID
+    @Column(name = "WORKLOG_TYPE_ID")
+    private Long workLogTypeId;
+    
+    // 日志类型
+    @Column(name = "WORKLOG_TYPE_NAME")
+    private String workLogTypeName;
+    
     // 所有者ID
     @Column(name = "TECHNICIAN_ID")
     private Long technicianId;
@@ -223,6 +231,38 @@ public class WorkOrderCharge extends NonIDEntity<WorkOrderCharge> {
 
     public void setCreatebyName(String createbyName) {
         this.createbyName = createbyName;
+    }
+
+    public Long getWorkLogTypeId() {
+        return workLogTypeId;
+    }
+
+    public void setWorkLogTypeId(Long workLogTypeId) {
+        this.workLogTypeId = workLogTypeId;
+    }
+
+    public String getWorkLogTypeName() {
+        return workLogTypeName;
+    }
+
+    public void setWorkLogTypeName(String workLogTypeName) {
+        this.workLogTypeName = workLogTypeName;
+    }
+
+    public Long getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Long createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public Long getTsStartTime() {
+        return tsStartTime;
+    }
+
+    public void setTsStartTime(Long tsStartTime) {
+        this.tsStartTime = tsStartTime;
     }
 
     @Override
