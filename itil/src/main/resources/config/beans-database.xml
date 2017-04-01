@@ -147,6 +147,7 @@
             <tx:method propagation="REQUIRED" isolation="DEFAULT" rollback-for="Exception" name="update*" />
             <tx:method propagation="REQUIRED" isolation="DEFAULT" rollback-for="Exception" name="add*" />
             <tx:method propagation="REQUIRED" isolation="DEFAULT" rollback-for="Exception" name="*RWT" />
+            <tx:method propagation="REQUIRED" isolation="DEFAULT" rollback-for="Exception" read-only="true" name="query*" />
             <tx:method propagation="REQUIRED" isolation="DEFAULT" rollback-for="Exception" read-only="true" name="load*" />
             <tx:method propagation="REQUIRED" isolation="DEFAULT" rollback-for="Exception" read-only="true" name="find*" />
             <tx:method propagation="REQUIRED" isolation="DEFAULT" rollback-for="Exception" read-only="true" name="*RT" />

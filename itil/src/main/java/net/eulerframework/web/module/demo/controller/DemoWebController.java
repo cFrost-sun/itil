@@ -12,6 +12,6 @@ public class DemoWebController extends JspSupportWebController {
     
     @RequestMapping(value = { "", "/", "index" }, method = RequestMethod.GET)
     public String index() {        
-        return this.crashPage(new RuntimeException("hehe", new RuntimeException("哈哈")));
+        return this.display("index");
     }
 }

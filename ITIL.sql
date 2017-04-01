@@ -4,12 +4,12 @@ SELECT
     QUEUE.QUEUENAME, --工作组
     STATUS.STATUSNAME STATUSNAME, -- 状态
     USERT.CINAME CINAME, --指派给 
-    ORG.NAME ORG_NAME, --地点
+    ORG.NAME SITE_NAME, --地点
     PRID.PRIORITYNAME PRIORITYNAME --优先级
 FROM
 (
     SELECT
-        WO.WORKORDERID WORKORDERID, --请求ID
+        WO.WORKORDERID WORKORDER_ID, --请求ID
         WO.CREATEDTIME CREATED_TIME, --创建时间
         WO.DUEBYTIME DUEBY_TIME,--逾期时间
         WOS.LAST_TECH_UPDATE UPDATE_TIME,--最后更新时间
@@ -45,7 +45,7 @@ LEFT JOIN StatusDefinition STATUS ON STATUS.STATUSID = BASE.STATUS_ID
 LEFT JOIN QueueDefinition QUEUE ON QUEUE.QUEUEID = BASE.QUEUE_ID;
 
 
-CREATE VIEW V_WORK_ORDER_WORK_LOG AS
+CREATE VIEW V_WORK_ORDER_CHARGE AS
 SELECT
     BASE.*,
     OWNER.FIRST_NAME OWNER_FIRST_NAME, --所有者 
@@ -57,20 +57,21 @@ SELECT
 FROM
 (
     SELECT 
-        WOC.WORKORDERID WORKORDERID, --请求ID
+        C.CHARGEID CHARGE_ID, --任务日志ID
+        WOC.WORKORDERID WORKORDER_ID, --请求ID
         C.TECHNICIANID TECHNICIAN_ID, --所有者 ID Y
         C.CREATEDBY CREATEDBY_ID, --创建人 ID Y
-        C.DESCRIPTION, --描述
-        C.TIMESPENT, --解决问题所用的时间(毫秒)
-        C.TS_ENDTIME, --结束时间
-        CF.UDF_CHAR1, --拆下部件名称
-        CF.UDF_CHAR3, --拆下部件件号 P/N
-        CF.UDF_CHAR5, --拆下部件序号 S/N
-        CF.UDF_LONG1, --停机时间-日志(Minutes)
-        CF.UDF_CHAR2, --安装/维修部件名称
-        CF.UDF_CHAR4, --安装/维修部件件号 P/N
-        CF.UDF_CHAR6, --安装/维修部件序号 S/N
-        CF.UDF_LONG2 --丢失时间-日志(Minutes)
+        C.DESCRIPTION DESCRIPTION, --描述
+        C.TIMESPENT TIMESPENT, --解决问题所用的时间(毫秒)
+        C.TS_ENDTIME TS_ENDTIME, --结束时间
+        CF.UDF_CHAR1 REMOVED_ARTIFACT_NAME, --拆下部件名称
+        CF.UDF_CHAR3 REMOVED_ARTIFACT_PN, --拆下部件件号 P/N
+        CF.UDF_CHAR5 REMOVED_ARTIFACT_SN, --拆下部件序号 S/N
+        CF.UDF_LONG1 DOWN_TIME, --停机时间-日志(Minutes)
+        CF.UDF_CHAR2 INSTALLED_ARTIFACT_NAME, --安装/维修部件名称
+        CF.UDF_CHAR4 INSTALLED_ARTIFACT_PN, --安装/维修部件件号 P/N
+        CF.UDF_CHAR6 INSTALLED_ARTIFACT_SN, --安装/维修部件序号 S/N
+        CF.UDF_LONG2 LOST_TIME --丢失时间-日志(Minutes)
     FROM
         WorkOrderToCharge WOC,
         ChargesTable C,
@@ -82,4 +83,3 @@ FROM
 AS BASE
 LEFT JOIN AaaUser OWNER ON OWNER.USER_ID = BASE.TECHNICIAN_ID
 LEFT JOIN AaaUser CREATEBY ON CREATEBY.USER_ID = BASE.CREATEDBY_ID;
- 
