@@ -1,6 +1,7 @@
 package net.eulerframework.web.module.demo.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -12,6 +13,7 @@ import net.eulerframework.web.core.annotation.WebController;
 import net.eulerframework.web.core.base.controller.AjaxSupportWebController;
 import net.eulerframework.web.core.base.request.easyuisupport.EasyUiQueryReqeuset;
 import net.eulerframework.web.core.base.response.easyuisupport.EasyUIPageResponse;
+import net.eulerframework.web.module.demo.entity.AaaUser;
 import net.eulerframework.web.module.demo.entity.QueueDefinition;
 import net.eulerframework.web.module.demo.entity.StatusDefinition;
 import net.eulerframework.web.module.demo.entity.WorkOrder;
@@ -23,6 +25,19 @@ import net.eulerframework.web.module.demo.service.WorkOrderService;
 public class DemoAjaxWebController extends AjaxSupportWebController {
     
     @Resource WorkOrderService workOrderService;
+    
+    
+    @RequestMapping(value ="findResources_ajax", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, String> findResources(){
+        return this.workOrderService.findResources();
+    }
+
+    @RequestMapping(value ="findAaaUsers_ajax", method = RequestMethod.GET)
+    @ResponseBody
+    public List<AaaUser> findAaaUsers(){
+        return this.workOrderService.findAaaUsers();
+    }
     
     @RequestMapping(value ="findQueueDefinitions_ajax", method = RequestMethod.GET)
     @ResponseBody
