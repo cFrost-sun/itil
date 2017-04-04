@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,6 +12,8 @@ import net.eulerframework.web.core.annotation.WebController;
 import net.eulerframework.web.core.base.controller.AjaxSupportWebController;
 import net.eulerframework.web.core.base.request.easyuisupport.EasyUiQueryReqeuset;
 import net.eulerframework.web.core.base.response.easyuisupport.EasyUIPageResponse;
+import net.eulerframework.web.module.demo.entity.QueueDefinition;
+import net.eulerframework.web.module.demo.entity.StatusDefinition;
 import net.eulerframework.web.module.demo.entity.WorkOrder;
 import net.eulerframework.web.module.demo.entity.WorkOrderCharge;
 import net.eulerframework.web.module.demo.service.WorkOrderService;
@@ -23,11 +24,16 @@ public class DemoAjaxWebController extends AjaxSupportWebController {
     
     @Resource WorkOrderService workOrderService;
     
-
-    @RequestMapping(value ="workOrder/{id}", method = RequestMethod.GET)
+    @RequestMapping(value ="findQueueDefinitions_ajax", method = RequestMethod.GET)
     @ResponseBody
-    public WorkOrder saveWorkType(@PathVariable("id") long id){
-        return this.workOrderService.findWorkOrder(id);
+    public List<QueueDefinition> findQueueDefinitions(){
+        return this.workOrderService.findQueueDefinitions();
+    }
+    
+    @RequestMapping(value ="findStatusDefinitions_ajax", method = RequestMethod.GET)
+    @ResponseBody
+    public List<StatusDefinition> findStatusDefinitions(){
+        return this.workOrderService.findStatusDefinitions();
     }
     
     @RequestMapping(value ="loadChargesByWorkOrderId_ajax", method = RequestMethod.GET)

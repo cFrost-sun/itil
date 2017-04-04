@@ -27,14 +27,39 @@
 <div id="work-order" data-options="region:'center'"
     style="background: #eee;">
     <div id="tb">
-            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="onSearch()">搜索</a>
-        <input class="easyui-textbox search-box e-dg-tb-filter" data-filter-name="id" data-options="label:'ID',labelAlign:'right',labelWidth:'30px',width:'90px'">
-        <input class="easyui-combobox search-box e-dg-tb-filter" data-filter-name="1" data-options="label:'机型',labelAlign:'center',labelWidth:'30px',width:'150px'">
-        <input class="easyui-textbox search-box e-dg-tb-filter" data-filter-name="title" data-options="label:'主题',labelAlign:'right',labelWidth:'30px',width:'150px'">
-        <input class="easyui-combobox search-box e-dg-tb-filter" data-filter-name="2" data-options="label:'状态',labelAlign:'center',labelWidth:'30px',width:'150px'">
-        <input class="easyui-combobox search-box e-dg-tb-filter" data-filter-name="3" data-options="label:'工作组',labelAlign:'center',labelWidth:'50px',width:'170px'">
-        <input class="easyui-datetimebox search-box e-dg-tb-filter" data-filter-name="begin" data-options="label:'创建时间',labelAlign:'right',labelWidth:'60px',width:'210px'">
-        <input class="easyui-datetimebox search-box e-dg-tb-filter" data-filter-name="end" data-options="label:'到',labelAlign:'center',labelWidth:'30px',width:'180px'">
+    <form id="search-form">
+        <a id="search-btn" href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="onSearch()">刷新</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="onReset()">清空</a>
+        <input class="easyui-textbox search-box e-dg-tb-filter" name="query.id" data-options="label:'ID',labelAlign:'right',labelWidth:'30px',width:'90px'">
+        <input class="easyui-combobox search-box e-dg-tb-filter" name="1" data-options="panelHeight:'auto',panelMaxHeight:'200px',label:'机型',labelAlign:'right',labelWidth:'30px',width:'150px'">
+        <input class="easyui-textbox search-box e-dg-tb-filter" name="query.title" data-options="label:'主题',labelAlign:'right',labelWidth:'30px',width:'150px'">
+        <input class="easyui-combobox search-box e-dg-tb-filter" name="query.statusId" data-options="
+                    url:'${__CONTEXT_PATH}/findStatusDefinitions_ajax',
+                    method:'get',
+                    valueField: 'id',
+                    textField: 'name',
+                    panelHeight:'auto',
+                    panelMaxHeight:'200px',
+                    label:'状态',
+                    labelAlign:'right',
+                    labelWidth:'30px',
+                    width:'150px',
+                    onChange:onSearch">
+        <input class="easyui-combobox search-box e-dg-tb-filter" name="query.queueId" data-options="
+                    url:'${__CONTEXT_PATH}/findQueueDefinitions_ajax',
+                    method:'get',
+                    valueField: 'id',
+                    textField: 'name',
+                    panelHeight:'auto',
+                    panelMaxHeight:'200px',
+                    label:'工作组',
+                    labelAlign:'right',
+                    labelWidth:'50px',
+                    width:'170px',
+                    onChange:onSearch">
+        <input class="easyui-datetimebox search-box e-dg-tb-filter" name="filter.begin" data-options="label:'创建时间',labelAlign:'right',labelWidth:'60px',width:'210px'">
+        <input class="easyui-datetimebox search-box e-dg-tb-filter" name="filter.end" data-options="label:'到',labelAlign:'center',labelWidth:'30px',width:'180px'">
+    </form>
     </div>
     <table class="easyui-datagrid" id="e-dg"
         data-options="
@@ -111,17 +136,14 @@
 <script src="${__ASSETS_PATH}/lib/easyui/easyui-lang-zh_CN.js"></script>
 <script>
 function onSearch() {
-    var filterList = $('#tb').find('.e-dg-tb-filter');
-    var data = {};
-    for(var i=0; i< filterList.length; i++) {
-        var filter = $(filterList[i]);
-        var name = filter.data("filter-name");
-        data['filter.' + name] = filter.textbox('getValue');
-    }
-    
-    $('#e-dg').datagrid('reload', data);
+    var jsonParam = $('#search-form').serializeJson();
+    jsonParam['mode.title']='anywhere';
+    $('#e-dg').datagrid('reload', jsonParam);
 }
 
+function onReset() {
+    $('#search-form').form('clear');
+}
 
 function selectWorkOrder(index, row){
     $.ajax({
@@ -142,6 +164,33 @@ function unixDatetimeFormatter(value, row, index) {
     return new Date(value).Format('yyyy-MM-dd hh:mm:ss');
 }
 
+//extends
+
+$.fn.serializeJson=function(){ 
+    var serializeObj={};
+    var array=this.serializeArray();
+    $(array).each(function(){
+            if(serializeObj[this.name]){
+                  if($.isArray(serializeObj[this.name])){ 
+                      serializeObj[this.name].push(this.value); 
+                  }else{
+                      serializeObj[this.name]=[serializeObj[this.name],this.value]; 
+                  } 
+            }else{ 
+                serializeObj[this.name]=this.value;
+            } 
+    }); 
+    return serializeObj; 
+};
+
+$(function(){
+    $("#search-form input,.search-table select").on('keyup',function(event){
+        if(event.keyCode == "13"){
+            $("#search-form #search-btn").click();
+        }
+    });
+});
+
 Date.prototype.Format = function (fmt) { //author: meizz 
     var o = {
         "M+": this.getMonth() + 1, //月份 
@@ -158,49 +207,8 @@ Date.prototype.Format = function (fmt) { //author: meizz
     return fmt;
 }
 
-var euler = {
-        table: {
-            loadData: function(table, data) {
-                var td = $(table).find('.data-td');
-
-                for(var i=0;i<td.length;i++){
-                    var field = $(td[i]).data("field");
-                    
-                    if(typeof(field) == 'undefined' || field == '')
-                        continue;
-                    
-                    var r =data[field];
-                    var value = r;
-                    
-                    var formatter = $(td[i]).data("formatter");
-                    if(typeof(formatter) != 'undefined' && formatter != '') {
-                        var func = eval(formatter);
-                        r =func(r, data);
-                    }
-
-                    if($(td[i]).hasClass('editable')) {
-                        if(typeof(r) == 'undefined')
-                            r = '';
-                        $($(td[i]).children('.td-input')[0]).val(r);                      
-                    } else {
-                        if(typeof(r) == 'undefined')
-                            r = '-';                        
-                        td[i].innerHTML = r+'<input type="hidden" name="'+field+'" value="'+value+'">';                        
-                    }                    
-                }
-            }
-        },
-        
+var euler = {        
         msg: {
-            confirm: function(msg, callback) {
-                $.messager.confirm("${e:i18n('_ADMIN_ALERT')}", msg, callback);
-            },
-            alert: function(msg) {
-                $.messager.alert("${e:i18n('_ADMIN_ALERT')}", msg);
-            },
-            error: function(msg) {
-                $.messager.alert("${e:i18n('_ADMIN_ERROR')}", "<div style='color: #D8504D;font-size: 1.5em;margin-bottom: 5px;'>ERROR</div><div style='margin-bottom: 5px;'>" + msg + "</div>");
-            },
             response: {
                 error: function(XMLHttpRequest) {
                     var response = JSON.parse(XMLHttpRequest.responseText);
@@ -208,12 +216,6 @@ var euler = {
                     $.messager.alert("${e:i18n('_ERROR')}", msg);
                 }
             }
-        },
-        
-        dialog: function(url, params, title, callback) {
-            eulerIframeDlgCallBackFunction = callback;
-            $('#e-iframe-dlg').dialog('open').dialog('setTitle', title);
-            $('#e-iframe-dlg-content').attr('src', url + '?' + params);
         }
 }
 </script>
