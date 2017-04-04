@@ -11,8 +11,8 @@ import net.eulerframework.web.core.base.entity.NonIDEntity;
 
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "AaaUser")
-public class AaaUser extends NonIDEntity<AaaUser> {
+@Table(name = "V_TECHNICIAN")
+public class Technician extends NonIDEntity<Technician> {
 
     // 状态ID
     @Id
@@ -45,7 +45,7 @@ public class AaaUser extends NonIDEntity<AaaUser> {
     }
 
     @Override
-    public int compareTo(AaaUser o) {
+    public int compareTo(Technician o) {
         return this.getId().compareTo(o.getId());
     }
 

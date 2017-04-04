@@ -13,7 +13,7 @@ import net.eulerframework.web.core.annotation.WebController;
 import net.eulerframework.web.core.base.controller.AjaxSupportWebController;
 import net.eulerframework.web.core.base.request.easyuisupport.EasyUiQueryReqeuset;
 import net.eulerframework.web.core.base.response.easyuisupport.EasyUIPageResponse;
-import net.eulerframework.web.module.demo.entity.AaaUser;
+import net.eulerframework.web.module.demo.entity.Technician;
 import net.eulerframework.web.module.demo.entity.QueueDefinition;
 import net.eulerframework.web.module.demo.entity.StatusDefinition;
 import net.eulerframework.web.module.demo.entity.WorkOrder;
@@ -33,10 +33,10 @@ public class DemoAjaxWebController extends AjaxSupportWebController {
         return this.workOrderService.findResources();
     }
 
-    @RequestMapping(value ="findAaaUsers_ajax", method = RequestMethod.GET)
+    @RequestMapping(value ="findTechnicians_ajax", method = RequestMethod.GET)
     @ResponseBody
-    public List<AaaUser> findAaaUsers(){
-        return this.workOrderService.findAaaUsers();
+    public List<Technician> findTechnicians(){
+        return this.workOrderService.findTechnicians();
     }
     
     @RequestMapping(value ="findQueueDefinitions_ajax", method = RequestMethod.GET)

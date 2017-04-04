@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 import net.eulerframework.web.core.base.request.easyuisupport.EasyUiQueryReqeuset;
 import net.eulerframework.web.core.base.response.easyuisupport.EasyUIPageResponse;
 import net.eulerframework.web.core.base.service.impl.BaseService;
-import net.eulerframework.web.module.demo.dao.AaaUserDao;
+import net.eulerframework.web.module.demo.dao.TechnicianDao;
 import net.eulerframework.web.module.demo.dao.QueueDefinitionDao;
 import net.eulerframework.web.module.demo.dao.StatusDefinitionDao;
 import net.eulerframework.web.module.demo.dao.WorkOrderChargeDao;
 import net.eulerframework.web.module.demo.dao.WorkOrderDao;
-import net.eulerframework.web.module.demo.entity.AaaUser;
+import net.eulerframework.web.module.demo.entity.Technician;
 import net.eulerframework.web.module.demo.entity.QueueDefinition;
 import net.eulerframework.web.module.demo.entity.StatusDefinition;
 import net.eulerframework.web.module.demo.entity.WorkOrder;
@@ -23,7 +23,7 @@ import net.eulerframework.web.module.demo.entity.WorkOrderCharge;
 
 @Service
 public class WorkOrderService extends BaseService {
-    @Resource AaaUserDao aaaUserDao;
+    @Resource TechnicianDao technicianDao;
     @Resource WorkOrderDao workOrderDao;
     @Resource WorkOrderChargeDao workOrderChargeDao;
     @Resource StatusDefinitionDao statusDefinitionDao;
@@ -34,8 +34,8 @@ public class WorkOrderService extends BaseService {
     }
     
 
-    public List<AaaUser> findAaaUsers() {
-        return this.aaaUserDao.findAaaUsers();
+    public List<Technician> findTechnicians() {
+        return this.technicianDao.findTechnicians();
     }
     
     public List<QueueDefinition> findQueueDefinitions() {

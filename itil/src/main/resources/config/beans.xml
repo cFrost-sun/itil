@@ -13,7 +13,7 @@
            http://www.springframework.org/schema/tx 
            http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
     
-    <bean id="aaaUserDao" class="net.eulerframework.web.module.demo.dao.AaaUserDao">
+    <bean id="technicianDao" class="net.eulerframework.web.module.demo.dao.TechnicianDao">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
     <bean id="queueDefinitionDao" class="net.eulerframework.web.module.demo.dao.QueueDefinitionDao">

@@ -10,14 +10,12 @@
 <title></title>
 
 <style>
-#work-order{
+body{
+min-width:1200px
 }
 
-#charge{
-}
-
-.search1-box{
-    width: 150px;
+.search-hr{
+    margin:3px 10px;
 }
 
 #search-form > div {
@@ -34,22 +32,10 @@
     <form id="search-form">
         请求:
         <div>
-        <input class="easyui-textbox search-box e-dg-tb-filter" name="query.id" data-options="label:'ID',labelAlign:'right',labelWidth:'40px',width:'160px'">
-        <input class="easyui-textbox search-box e-dg-tb-filter" name="query.resource" data-options="label:'机型Resource',labelAlign:'right',labelWidth:'90px',width:'210px'">
-        <input class="easyui-textbox search-box e-dg-tb-filter" name="query.title" data-options="label:'主题',labelAlign:'right',labelWidth:'60px',width:'180px'">
-        <input class="easyui-combobox search-box e-dg-tb-filter" name="query.statusId" data-options="
-                    url:'${__CONTEXT_PATH}/findStatusDefinitions_ajax',
-                    method:'get',
-                    valueField: 'id',
-                    textField: 'name',
-                    panelHeight:'auto',
-                    panelMaxHeight:'200px',
-                    label:'状态',
-                    labelAlign:'right',
-                    labelWidth:'60px',
-                    width:'180px',
-                    onChange:onSearch">
-        <input class="easyui-combobox search-box e-dg-tb-filter" name="query.queueId" data-options="
+        <input class="easyui-textbox search-box e-dg-tb-filter" name="query.id" data-options="label:'ID',labelAlign:'right',labelWidth:'60px',width:'180px'"
+        ><input class="easyui-textbox search-box e-dg-tb-filter" name="query.title" data-options="label:'主题',labelAlign:'right',labelWidth:'60px',width:'210px'"
+        ><input class="easyui-textbox search-box e-dg-tb-filter" name="query.resource" data-options="label:'机型Resource',labelAlign:'right',labelWidth:'90px',width:'210px'"
+        ><input class="easyui-combobox search-box e-dg-tb-filter" name="query.queueId" data-options="
                     url:'${__CONTEXT_PATH}/findQueueDefinitions_ajax',
                     method:'get',
                     valueField: 'id',
@@ -60,35 +46,49 @@
                     labelAlign:'right',
                     labelWidth:'60px',
                     width:'180px',
+                    onChange:onSearch"
+        ><input class="easyui-combobox search-box e-dg-tb-filter" name="query.statusId" data-options="
+                    url:'${__CONTEXT_PATH}/findStatusDefinitions_ajax',
+                    method:'get',
+                    valueField: 'id',
+                    textField: 'name',
+                    panelHeight:'auto',
+                    panelMaxHeight:'200px',
+                    panelWidth:'300px',
+                    label:'状态',
+                    labelAlign:'right',
+                    labelWidth:'60px',
+                    width:'180px',
                     onChange:onSearch">
-        <!-- </div>
-        <div> -->
-        <input class="easyui-datetimebox search-box e-dg-tb-filter" name="filter.begin" data-options="label:'创建时间',labelAlign:'right',labelWidth:'60px',width:'210px'">
-        <input class="easyui-datetimebox search-box e-dg-tb-filter" name="filter.end" data-options="label:'到',labelAlign:'center',labelWidth:'20px',width:'170px'">
         </div>
-        <hr>
+        <div>
+        <input class="easyui-datetimebox search-box e-dg-tb-filter" name="filter.begin" data-options="label:'创建时间',labelAlign:'right',labelWidth:'60px',width:'210px'"
+        ><input class="easyui-datetimebox search-box e-dg-tb-filter" name="filter.end" data-options="label:'到',labelAlign:'center',labelWidth:'30px',width:'180px'">
+        </div>
+        <hr class="search-hr">
         日志: 
         <div>
-        <input class="easyui-textbox search-box e-dg-tb-filter" name="filter.log_desc" data-options="label:'描述',labelAlign:'right',labelWidth:'40px',width:'355px'">
-        <input class="easyui-textbox search-box e-dg-tb-filter" name="filter.log_removedArtifactName" data-options="label:'拆下部件名称',labelAlign:'right',labelWidth:'80px',width:'200px'">
-        <input class="easyui-combobox search-box e-dg-tb-filter" name="filter.log_owner" data-options="
-                    url:'${__CONTEXT_PATH}/findAaaUsers_ajax',
+        <input class="easyui-textbox search-box e-dg-tb-filter" name="filter.log_desc" data-options="label:'描述',labelAlign:'right',labelWidth:'60px',width:'390px'"
+        ><input class="easyui-textbox search-box e-dg-tb-filter" name="filter.log_removedArtifactName" data-options="label:'拆下部件名称',labelAlign:'right',labelWidth:'90px',width:'210px'"
+        ><input class="easyui-combobox search-box e-dg-tb-filter" name="filter.log_owner" data-options="
+                    url:'${__CONTEXT_PATH}/findTechnicians_ajax',
                     method:'get',
                     valueField: 'id',
                     textField: 'firstName',
                     panelHeight:'auto',
                     panelMaxHeight:'200px',
+                    panelWidth:'160px',
                     label:'所有者',
                     labelAlign:'right',
                     labelWidth:'60px',
                     width:'180px',
-                    onChange:onSearch">
-        <input class="easyui-datetimebox search-box e-dg-tb-filter" name="filter.log_begin" data-options="label:'创建时间',labelAlign:'right',labelWidth:'60px',width:'210px'">
-        <input class="easyui-datetimebox search-box e-dg-tb-filter" name="filter.log_end" data-options="label:'到',labelAlign:'center',labelWidth:'20px',width:'170px'">
+                    onChange:onSearch"
+        ><input class="easyui-datetimebox search-box e-dg-tb-filter" name="filter.log_begin" data-options="label:'创建时间',labelAlign:'right',labelWidth:'60px',width:'210px'"
+        ><input class="easyui-datetimebox search-box e-dg-tb-filter" name="filter.log_end" data-options="label:'到',labelAlign:'center',labelWidth:'30px',width:'180px'">
         </div>        
-        <hr>       
-        <a id="search-btn" href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="onSearch()">刷新</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="onReset()">清空</a>
+        <hr class="search-hr">       
+        <a id="search-btn" href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="onSearch()">查找请求</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="onReset()">清空筛选条件</a>
     </form>
     </div>
     <table class="easyui-datagrid" id="e-dg"
