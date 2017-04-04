@@ -15,6 +15,10 @@
 
 #charge{
 }
+
+.search1-box{
+    width: 150px;
+}
 </style>
 
 </head>
@@ -22,9 +26,19 @@
 <body class="easyui-layout">
 <div id="work-order" data-options="region:'center'"
     style="background: #eee;">
-        
-    <table class="easyui-datagrid" 
+    <div id="tb">
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="onSearch()">搜索</a>
+        <input class="easyui-textbox search-box e-dg-tb-filter" data-filter-name="id" data-options="label:'ID',labelAlign:'right',labelWidth:'30px',width:'90px'">
+        <input class="easyui-combobox search-box e-dg-tb-filter" data-filter-name="1" data-options="label:'机型',labelAlign:'center',labelWidth:'30px',width:'150px'">
+        <input class="easyui-textbox search-box e-dg-tb-filter" data-filter-name="title" data-options="label:'主题',labelAlign:'right',labelWidth:'30px',width:'150px'">
+        <input class="easyui-combobox search-box e-dg-tb-filter" data-filter-name="2" data-options="label:'状态',labelAlign:'center',labelWidth:'30px',width:'150px'">
+        <input class="easyui-combobox search-box e-dg-tb-filter" data-filter-name="3" data-options="label:'工作组',labelAlign:'center',labelWidth:'50px',width:'170px'">
+        <input class="easyui-datetimebox search-box e-dg-tb-filter" data-filter-name="begin" data-options="label:'创建时间',labelAlign:'right',labelWidth:'60px',width:'210px'">
+        <input class="easyui-datetimebox search-box e-dg-tb-filter" data-filter-name="end" data-options="label:'到',labelAlign:'center',labelWidth:'30px',width:'180px'">
+    </div>
+    <table class="easyui-datagrid" id="e-dg"
         data-options="
+            toolbar:'#tb',
             fit:true,
             url:'${__CONTEXT_PATH}/queryWorkerOrderByPage_ajax',
             fitColumns:false,
@@ -96,6 +110,19 @@
 <script src="${__ASSETS_PATH}/lib/easyui/jquery.easyui.min.js"></script>
 <script src="${__ASSETS_PATH}/lib/easyui/easyui-lang-zh_CN.js"></script>
 <script>
+function onSearch() {
+    var filterList = $('#tb').find('.e-dg-tb-filter');
+    var data = {};
+    for(var i=0; i< filterList.length; i++) {
+        var filter = $(filterList[i]);
+        var name = filter.data("filter-name");
+        data['filter.' + name] = filter.textbox('getValue');
+    }
+    
+    $('#e-dg').datagrid('reload', data);
+}
+
+
 function selectWorkOrder(index, row){
     $.ajax({
         url:'loadChargesByWorkOrderId_ajax',
