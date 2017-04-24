@@ -1,5 +1,6 @@
 package net.eulerframework.web.module.demo.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,20 +36,82 @@ public class DemoAjaxWebController extends AjaxSupportWebController {
 
     @RequestMapping(value ="findTechnicians_ajax", method = RequestMethod.GET)
     @ResponseBody
-    public List<Technician> findTechnicians(){
-        return this.workOrderService.findTechnicians();
+    public List<SelectDataVO> findTechnicians(){
+        List<Technician> list = this.workOrderService.findTechnicians();
+        
+        List<SelectDataVO> ret = new ArrayList<>();        
+        ret.add(SelectDataVO.ALL);        
+        if(list != null) {
+            for(Technician each : list) {
+                SelectDataVO data = new SelectDataVO(each);
+                ret.add(data);
+            }
+        }
+        
+        return ret;
+    }
+    
+    public static class SelectDataVO {
+        public final static SelectDataVO ALL = new SelectDataVO();
+        private String id;
+        private String value;
+        public String getId() {
+            return id;
+        }
+        public String getValue() {
+            return value;
+        }
+        
+        private SelectDataVO() {
+            this.id = "";
+            this.value = "不限";
+        }
+        public SelectDataVO(Technician technician) {
+            this.value = technician.getFirstName();
+            this.id = technician.getId() == null ? "" : technician.getId().toString();
+        }
+        public SelectDataVO(QueueDefinition data) {
+            this.value = data.getName();
+            this.id = data.getId() == null ? "" : data.getId().toString();
+        }
+        public SelectDataVO(StatusDefinition data) {
+            this.value = data.getName();
+            this.id = data.getId() == null ? "" : data.getId().toString();
+        }
     }
     
     @RequestMapping(value ="findQueueDefinitions_ajax", method = RequestMethod.GET)
     @ResponseBody
-    public List<QueueDefinition> findQueueDefinitions(){
-        return this.workOrderService.findQueueDefinitions();
+    public List<SelectDataVO> findQueueDefinitions(){
+        List<QueueDefinition> list = this.workOrderService.findQueueDefinitions();
+        
+        List<SelectDataVO> ret = new ArrayList<>();        
+        ret.add(SelectDataVO.ALL);        
+        if(list != null) {
+            for(QueueDefinition each : list) {
+                SelectDataVO data = new SelectDataVO(each);
+                ret.add(data);
+            }
+        }
+        
+        return ret;
     }
     
     @RequestMapping(value ="findStatusDefinitions_ajax", method = RequestMethod.GET)
     @ResponseBody
-    public List<StatusDefinition> findStatusDefinitions(){
-        return this.workOrderService.findStatusDefinitions();
+    public List<SelectDataVO> findStatusDefinitions(){
+        List<StatusDefinition> list = this.workOrderService.findStatusDefinitions();
+        
+        List<SelectDataVO> ret = new ArrayList<>();        
+        ret.add(SelectDataVO.ALL);        
+        if(list != null) {
+            for(StatusDefinition each : list) {
+                SelectDataVO data = new SelectDataVO(each);
+                ret.add(data);
+            }
+        }
+        
+        return ret;
     }
     
     @RequestMapping(value ="loadChargesByWorkOrderId_ajax", method = RequestMethod.GET)

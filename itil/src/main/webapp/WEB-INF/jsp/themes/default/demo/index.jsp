@@ -39,7 +39,7 @@ min-width:1200px
                     url:'${__CONTEXT_PATH}/findQueueDefinitions_ajax',
                     method:'get',
                     valueField: 'id',
-                    textField: 'name',
+                    textField: 'value',
                     panelHeight:'auto',
                     panelMaxHeight:'200px',
                     label:'工作组',
@@ -47,11 +47,12 @@ min-width:1200px
                     labelWidth:'60px',
                     width:'180px',
                     onChange:onSearch"
+                id = "query_queue"
         ><input class="easyui-combobox search-box e-dg-tb-filter" name="query.statusId" data-options="
                     url:'${__CONTEXT_PATH}/findStatusDefinitions_ajax',
                     method:'get',
                     valueField: 'id',
-                    textField: 'name',
+                    textField: 'value',
                     panelHeight:'auto',
                     panelMaxHeight:'200px',
                     panelWidth:'300px',
@@ -59,12 +60,13 @@ min-width:1200px
                     labelAlign:'right',
                     labelWidth:'60px',
                     width:'180px',
-                    onChange:onSearch">
-        </div>
+                    onChange:onSearch"
+                id = "query_status"><input class="easyui-textbox search-box e-dg-tb-filter" name="query.siteName" data-options="label:'地点/大厅',labelAlign:'right',labelWidth:'90px',width:'210px'"
+        ></div>
         <div>
         <input class="easyui-datetimebox search-box e-dg-tb-filter" name="filter.begin" data-options="label:'创建时间',labelAlign:'right',labelWidth:'60px',width:'210px'"
-        ><input class="easyui-datetimebox search-box e-dg-tb-filter" name="filter.end" data-options="label:'到',labelAlign:'center',labelWidth:'30px',width:'180px'">
-        </div>
+        ><input class="easyui-datetimebox search-box e-dg-tb-filter" name="filter.end" data-options="label:'到',labelAlign:'center',labelWidth:'30px',width:'180px'"
+        ></div>
         <hr class="search-hr">
         日志: 
         <div>
@@ -74,7 +76,7 @@ min-width:1200px
                     url:'${__CONTEXT_PATH}/findTechnicians_ajax',
                     method:'get',
                     valueField: 'id',
-                    textField: 'firstName',
+                    textField: 'value',
                     panelHeight:'auto',
                     panelMaxHeight:'200px',
                     panelWidth:'160px',
@@ -109,11 +111,11 @@ min-width:1200px
             onClickRow:selectWorkOrder">
         <thead>
             <tr>
-                <th data-options="field:'siteName',align:'center',width:'80px'">地点/大厅</th>
-                <th data-options="field:'resource',align:'center',width:'100px'">机型Resource</th>
-                <th data-options="field:'id',align:'center',width:'60px'">ID</th>
+                <th data-options="field:'siteName',align:'center',sortable:true,width:'80px'">地点/大厅</th>
+                <th data-options="field:'resource',align:'center',sortable:true,width:'100px'">机型Resource</th>
+                <th data-options="field:'id',align:'center',sortable:true,width:'60px'">ID</th>
                 <th data-options="field:'priorityName',align:'center',sortable:true,width:'70px'">优先级</th>
-                <th data-options="field:'title',align:'left',width:'300px'">主题</th>
+                <th data-options="field:'title',align:'left',width:'300px',formatter:formatCellTooltip">主题</th>
                 <th data-options="field:'statusName',align:'center',sortable:true,width:'120px'">状态</th>
                 <th data-options="field:'linkedRequestId',align:'center',width:'60px'">关联请求</th>
                 <th data-options="field:'queueName',align:'center',sortable:true,width:'60px'">工作组</th>
@@ -137,6 +139,7 @@ min-width:1200px
         data-options="
             fit:true,
             fitColumns:false,
+            nowrap: false,
             singleSelect:true,
             rownumbers:true,
             remoteSort:false,
@@ -148,7 +151,7 @@ min-width:1200px
                 <th data-options="field:'createdTime',align:'center',width:'130px',formatter:unixDatetimeFormatter">创建时间</th>
                 <th data-options="field:'ownerName',align:'center',width:'130px'">所有者</th>
                 <th data-options="field:'description',align:'left',width:'300px'">描述</th>
-                <th data-options="field:'timeSpent',align:'center',width:'130px'">解决问题所用的时间</th>
+                <th data-options="field:'timeSpent',align:'center',width:'130px',formatter:timeFormatter">解决问题所用的时间</th>
                 <th data-options="field:'downTime',align:'center',width:'120px'">停机时间-日志</th>
                 <th data-options="field:'lostTime',align:'center',width:'120px'">丢失时间-日志</th>
                 <th data-options="field:'workLogTypeName',align:'center',width:'120px'">工作日志类型</th>
@@ -166,6 +169,15 @@ min-width:1200px
 <script src="${__ASSETS_PATH}/lib/easyui/jquery.easyui.min.js"></script>
 <script src="${__ASSETS_PATH}/lib/easyui/easyui-lang-zh_CN.js"></script>
 <script>
+$(function(){   
+    $("#e-dg").datagrid("keyCtr");
+    onReset();
+});
+
+function move() {
+    moveRow($('#e-dg'));
+}
+
 function onSearch() {
     var jsonParam = $('#search-form').serializeJson();
     jsonParam['mode.title']='anywhere';
@@ -175,6 +187,8 @@ function onSearch() {
 
 function onReset() {
     $('#search-form').form('clear');
+    $('#query_queue').combobox('select', '1');
+    $('#query_status').combobox('select', '1');
 }
 
 function selectWorkOrder(index, row){
@@ -192,8 +206,18 @@ function selectWorkOrder(index, row){
     });
 }
 
+function formatCellTooltip(value){  
+    return "<span title='" + value + "'>" + value + "</span>";  
+}
+
 function unixDatetimeFormatter(value, row, index) {
     return new Date(value).Format('yyyy-MM-dd hh:mm:ss');
+}
+
+function timeFormatter(value, row, index) {
+    var hours = parseInt(value / 1000 / 60 / 60);
+    var min = parseInt(value / 1000 / 60 % 60);
+    return hours + "小时" + min + "分";
 }
 
 //extends
@@ -250,6 +274,47 @@ var euler = {
             }
         }
 }
+
+$.extend($.fn.datagrid.methods, {
+    keyCtr : function (jq) {
+        return jq.each(function () {
+            var grid = $(this);
+            grid.datagrid('getPanel').panel('panel').attr('tabindex', 1).bind('keydown', function (e) {
+                switch (e.keyCode) {
+                case 38: // up
+                    var selected = grid.datagrid('getSelected');
+                    var i;
+                    if (selected) {
+                        var index = grid.datagrid('getRowIndex', selected);
+                        i = index - 1;
+                        grid.datagrid('selectRow', i);
+                    } else {
+                        var rows = grid.datagrid('getRows');
+                        i = rows.length - 1;
+                        grid.datagrid('selectRow', i);
+                    }
+                    var data = grid.datagrid('getSelected');
+                    selectWorkOrder(i, data);
+                    break;
+                case 40: // down
+                    var selected = grid.datagrid('getSelected');
+                    var i;
+                    if (selected) {
+                        var index = grid.datagrid('getRowIndex', selected);
+                        i = index + 1;
+                        grid.datagrid('selectRow', i);
+                    } else {
+                        i = 0;
+                        grid.datagrid('selectRow', i);
+                    }
+                    var data = grid.datagrid('getSelected');
+                    selectWorkOrder(i, data);
+                    break;
+                }
+            });
+        });
+    }
+});
 </script>
 </body>
 
