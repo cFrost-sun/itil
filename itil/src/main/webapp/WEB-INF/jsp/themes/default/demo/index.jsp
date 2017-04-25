@@ -32,9 +32,9 @@ min-width:1200px
     <form id="search-form">
         请求:
         <div>
-        <input class="easyui-textbox search-box e-dg-tb-filter" name="query.id" data-options="label:'ID',labelAlign:'right',labelWidth:'60px',width:'180px'"
-        ><input class="easyui-textbox search-box e-dg-tb-filter" name="query.title" data-options="label:'主题',labelAlign:'right',labelWidth:'60px',width:'210px'"
-        ><input class="easyui-textbox search-box e-dg-tb-filter" name="query.resource" data-options="label:'机型Resource',labelAlign:'right',labelWidth:'90px',width:'210px'"
+        <input class="easyui-textbox search-box e-dg-tb-filter" id = "query_id" name="query.id" data-options="label:'ID',labelAlign:'right',labelWidth:'60px',width:'180px'"
+        ><input class="easyui-textbox search-box e-dg-tb-filter" id = "query_title" name="query.title" data-options="label:'主题',labelAlign:'right',labelWidth:'60px',width:'210px'"
+        ><input class="easyui-textbox search-box e-dg-tb-filter" id = "query_resource" name="query.resource" data-options="label:'机型Resource',labelAlign:'right',labelWidth:'90px',width:'210px'"
         ><input class="easyui-combobox search-box e-dg-tb-filter" name="query.queueId" data-options="
                     url:'${__CONTEXT_PATH}/findQueueDefinitions_ajax',
                     method:'get',
@@ -61,18 +61,18 @@ min-width:1200px
                     labelWidth:'60px',
                     width:'180px',
                     onChange:onSearch"
-                id = "query_status"><input class="easyui-textbox search-box e-dg-tb-filter" name="query.siteName" data-options="label:'地点/大厅',labelAlign:'right',labelWidth:'90px',width:'210px'"
+                id = "query_status"><input class="easyui-textbox search-box e-dg-tb-filter" id = "query_siteName" name="query.siteName" data-options="label:'地点/大厅',labelAlign:'right',labelWidth:'90px',width:'210px'"
         ></div>
         <div>
-        <input class="easyui-datetimebox search-box e-dg-tb-filter" name="filter.begin" data-options="label:'创建时间',labelAlign:'right',labelWidth:'60px',width:'210px'"
-        ><input class="easyui-datetimebox search-box e-dg-tb-filter" name="filter.end" data-options="label:'到',labelAlign:'center',labelWidth:'30px',width:'180px'"
+        <input class="easyui-datetimebox search-box e-dg-tb-filter" id = "filter_begin" name="filter.begin" data-options="label:'创建时间',labelAlign:'right',labelWidth:'60px',width:'210px'"
+        ><input class="easyui-datetimebox search-box e-dg-tb-filter" id = "filter_end" name="filter.end" data-options="label:'到',labelAlign:'center',labelWidth:'30px',width:'180px'"
         ></div>
         <hr class="search-hr">
         日志: 
         <div>
-        <input class="easyui-textbox search-box e-dg-tb-filter" name="filter.log_desc" data-options="label:'描述',labelAlign:'right',labelWidth:'60px',width:'390px'"
-        ><input class="easyui-textbox search-box e-dg-tb-filter" name="filter.log_removedArtifactName" data-options="label:'拆下部件名称',labelAlign:'right',labelWidth:'90px',width:'210px'"
-        ><input class="easyui-combobox search-box e-dg-tb-filter" name="filter.log_owner" data-options="
+        <input class="easyui-textbox search-box e-dg-tb-filter" id="filter_log_desc" name="filter.log_desc" data-options="label:'描述',labelAlign:'right',labelWidth:'60px',width:'390px'"
+        ><input class="easyui-textbox search-box e-dg-tb-filter" id="filter_log_removedArtifactName" name="filter.log_removedArtifactName" data-options="label:'拆下部件名称',labelAlign:'right',labelWidth:'90px',width:'210px'"
+        ><input class="easyui-combobox search-box e-dg-tb-filter" id="filter_log_owner" name="filter.log_owner" data-options="
                     url:'${__CONTEXT_PATH}/findTechnicians_ajax',
                     method:'get',
                     valueField: 'id',
@@ -85,12 +85,14 @@ min-width:1200px
                     labelWidth:'60px',
                     width:'180px',
                     onChange:onSearch"
-        ><input class="easyui-datetimebox search-box e-dg-tb-filter" name="filter.log_begin" data-options="label:'创建时间',labelAlign:'right',labelWidth:'60px',width:'210px'"
-        ><input class="easyui-datetimebox search-box e-dg-tb-filter" name="filter.log_end" data-options="label:'到',labelAlign:'center',labelWidth:'30px',width:'180px'">
+        ><input class="easyui-datetimebox search-box e-dg-tb-filter" id="filter_log_begin" name="filter.log_begin" data-options="label:'创建时间',labelAlign:'right',labelWidth:'60px',width:'210px'"
+        ><input class="easyui-datetimebox search-box e-dg-tb-filter" id="filter_log_end" name="filter.log_end" data-options="label:'到',labelAlign:'center',labelWidth:'30px',width:'180px'">
         </div>        
         <hr class="search-hr">       
         <a id="search-btn" href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="onSearch()">查找请求</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="onReset()">清空筛选条件</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="onReset()">清空所有筛选条件</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="clearWorkerOrder()">清空请求筛选条件</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="clearWorkerLog()">清空日志筛选条件</a>
     </form>
     </div>
     <table class="easyui-datagrid" id="e-dg"
@@ -113,7 +115,7 @@ min-width:1200px
             <tr>
                 <th data-options="field:'siteName',align:'center',sortable:true,width:'80px'">地点/大厅</th>
                 <th data-options="field:'resource',align:'center',sortable:true,width:'100px'">机型Resource</th>
-                <th data-options="field:'id',align:'center',sortable:true,width:'60px'">ID</th>
+                <th data-options="field:'id',align:'center',sortable:true,width:'60px',formatter:edit">ID</th>
                 <th data-options="field:'priorityName',align:'center',sortable:true,width:'70px'">优先级</th>
                 <th data-options="field:'title',align:'left',width:'300px',formatter:formatCellTooltip">主题</th>
                 <th data-options="field:'statusName',align:'center',sortable:true,width:'120px'">状态</th>
@@ -191,12 +193,46 @@ function onReset() {
     $('#query_status').combobox('select', '1');
 }
 
+function clearWorkerOrder() {
+    $('#query_id').textbox('clear');
+    $('#query_resource').textbox('clear');
+    $('#query_title').textbox('clear');
+    $('#query_siteName').textbox('clear');
+    $('#filter_begin').datetimebox('clear');
+    $('#filter_end').datetimebox('clear');
+    $('#query_queue').combobox('select', '1');
+    $('#query_status').combobox('select', '1');
+    onSearch();        
+}
+
+function clearWorkerLog() {
+    $('#filter_log_desc').textbox('clear');
+    $('#filter_log_removedArtifactName').textbox('clear');
+    $('#filter_log_owner').combobox('clear');
+    $('#filter_log_begin').datetimebox('clear');
+    $('#filter_log_end').datetimebox('clear');
+    onSearch();    
+}
+
 function selectWorkOrder(index, row){
+    var desc = $('#filter_log_desc').textbox('getValue');
+    var removedArtifactName = $('#filter_log_removedArtifactName').textbox('getValue');
+    var owner = $('#filter_log_owner').combobox('getValue');
+    var begin = $('#filter_log_begin').datetimebox('getValue');
+    var end = $('#filter_log_end').datetimebox('getValue');
     $.ajax({
         url:'loadChargesByWorkOrderId_ajax',
         type:'GET',
         async:true,
-        data: {workOrderId: row.id},
+        data: 
+            {
+                workOrderId: row.id,
+                desc: desc,
+                removedArtifactName: removedArtifactName,
+                owner: owner,
+                begin: begin,
+                end: end
+            },
         error:function(XMLHttpRequest, textStatus, errorThrown) {
             euler.msg.response.error(XMLHttpRequest);
         },
@@ -204,6 +240,10 @@ function selectWorkOrder(index, row){
             $('#charge-dg').datagrid('loadData', data.rows)
         }
     });
+}
+
+function edit(value, row, index) {
+    return '<a target="_blank" href="${sdpurl}' + '/WorkOrder.do?woMode=viewWO&woID=' + row.id+'">'+row.id+'</a>';
 }
 
 function formatCellTooltip(value){  

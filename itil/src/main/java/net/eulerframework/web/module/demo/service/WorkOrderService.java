@@ -50,7 +50,13 @@ public class WorkOrderService extends BaseService {
         return this.workOrderDao.pageQuery(easyUiQueryReqeuset);
     }
 
-    public List<WorkOrderCharge> loadChargesByWorkOrderId(long workOrderId) {
-        return this.workOrderChargeDao.loadChargesByWorkOrderId(workOrderId);
+    public List<WorkOrderCharge> loadChargesByWorkOrderId(long workOrderId, String desc, String removedArtifactName, String owner, String begin, String end) {
+        return this.workOrderChargeDao.loadChargesByWorkOrderId(
+                workOrderId,
+                desc,
+                removedArtifactName,
+                owner,
+                begin,
+                end);
     }
 }

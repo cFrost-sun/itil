@@ -116,8 +116,20 @@ public class DemoAjaxWebController extends AjaxSupportWebController {
     
     @RequestMapping(value ="loadChargesByWorkOrderId_ajax", method = RequestMethod.GET)
     @ResponseBody
-    public EasyUIPageResponse<WorkOrderCharge> loadChargesByWorkOrderId(long workOrderId){        
-        List<WorkOrderCharge> ret = this.workOrderService.loadChargesByWorkOrderId(workOrderId);
+    public EasyUIPageResponse<WorkOrderCharge> loadChargesByWorkOrderId(
+            long workOrderId,
+            String desc,
+            String removedArtifactName,
+            String owner,
+            String begin,
+            String end){        
+        List<WorkOrderCharge> ret = this.workOrderService.loadChargesByWorkOrderId(
+                workOrderId,
+                desc,
+                removedArtifactName,
+                owner,
+                begin,
+                end);
         return new EasyUIPageResponse<>(ret, ret == null ? 0 : ret.size(), 1, ret == null ? 0 : ret.size());
     }
     
